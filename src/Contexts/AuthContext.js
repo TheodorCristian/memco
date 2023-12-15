@@ -1,5 +1,5 @@
 // AuthContext.js
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import {
   login as loginAPI,
   signout as signoutAPI,
@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const userToken = await loginAPI(email, password); // Using login function from AuthActions
-      console.log(userToken);
       setUser(userToken.data);
       return userToken;
     } catch (error) {

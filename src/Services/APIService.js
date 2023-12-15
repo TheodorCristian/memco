@@ -13,18 +13,42 @@ export const makeAuthenticatedRequest = async (path, method, body) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
     };
 
     if (body) {
       options.body = JSON.stringify(body);
     }
-
     const response = await fetch(`${appConfig.baseURL}${path}`, options);
+    const data = await response.json();
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    switch (response.status) {
+      case 200:
+        return {
+          isSuccess: true,
+          data: data.data,
+        };
+
+      case 401:
+        return {
+          isSuccess: false,
+          redirectPath: "/session-expired",
+        };
+
+      case 403:
+        return {
+          isSuccess: false,
+          redirectPath: "/forbidden",
+        };
+
+      case 404:
+        return {
+          isSuccess: false,
+          redirectPath: "/session-expired",
+        };
+
+      case 500:
+        throw new Error("Data not found");
     }
   } catch (error) {
     throw new Error(`Error fetching data: ${error.message}`);

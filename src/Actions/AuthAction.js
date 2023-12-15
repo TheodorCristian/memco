@@ -14,10 +14,8 @@ export const login = async (email, password) => {
       data.tokenResult.uid,
       response.token
     );
-
-    console.log(userResponse);
     const userData = await userResponse.result.json();
-    console.log(userData);
+
     if (!userResponse.isSuccess) {
       throw new Error("Failed to retrieve user roles");
     }
@@ -32,6 +30,13 @@ export const signup = async (data) => {
   try {
     const response = await Auth.signup(data);
     if (response.uid) {
+      const setupRoleClaimResponse = await Auth.setupRoleClaim(
+        data.role,
+        response.uid
+      );
+      if (!setupRoleClaimResponse.isSuccess) {
+        throw new Error("Failed to setup role cookie");
+      }
       return response.uid; // Modify this according to your backend response structure
     } else {
       throw new Error("Failed to sign up");

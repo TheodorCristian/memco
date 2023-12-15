@@ -1,6 +1,7 @@
 import { makeAuthenticatedRequest } from "../Services/APIService";
 
 export const getOrders = async () => {
-  let result = await makeAuthenticatedRequest("/orders", "POST", null);
+  // Make an authenticated request using makeAuthenticatedRequest function
+  let result = await makeAuthenticatedRequest("/admin/orders", "POST", null);
   return result;
 };

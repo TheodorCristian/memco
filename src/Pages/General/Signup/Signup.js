@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Signup.scss";
 import { signup } from "../../../Actions/AuthAction"; // Import login function from AuthActions
 import { useAuth } from "../../../Contexts/AuthContext";
@@ -13,6 +14,8 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const { signout } = useAuth();
 
   const handleSignUp = async (e) => {
@@ -24,6 +27,7 @@ const Signup = () => {
       lastName: lastName,
       address: address,
       phoneNumber: phoneNumber,
+      role: "user",
     };
 
     if (!email || !password) {
@@ -51,6 +55,10 @@ const Signup = () => {
         localStorage.removeItem("uid");
         localStorage.removeItem("userToken");
         localStorage.removeItem("userRoles");
+
+        window.dispatchEvent(new Event("localStorageUpdated"));
+
+        navigate("/signin");
       }
     } catch (error) {
       console.error("Error:", error.message);

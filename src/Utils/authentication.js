@@ -23,7 +23,7 @@ const Auth = {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       return { result: response, token: token };
     } catch (error) {
       // Handle login error
@@ -43,17 +43,14 @@ const Auth = {
       // Add to data object the uid geenrated after the user was created at the authentication app service
       data.uid = userCredential.user.uid;
 
-      const userDetails = await fetch(
-        `${appConfig.baseURL}/auth/create-new-user`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Add any other headers if required (e.g., authorization token)
-          },
-          body: JSON.stringify({ data }),
-        }
-      );
+      await fetch(`${appConfig.baseURL}/auth/create-new-user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data }),
+      });
+
       return userCredential.user; // Return user object after successful signup
     } catch (error) {
       // Handle signup error
@@ -72,29 +69,43 @@ const Auth = {
     }
   },
 
-  async getUserRoles (uid, token) {
-    
-      try {
-        const userResponse = await fetch(
-          `${appConfig.baseURL}/auth/get-user-roles`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ uid: uid }),
-          }
-        );
+  async getUserRoles(uid, token) {
+    try {
+      const userResponse = await fetch(
+        `${appConfig.baseURL}/auth/get-user-roles`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ uid: uid }),
+        }
+      );
 
-        return {isSuccess: true, result: userResponse}
-      } catch (error) {
-        throw new Error("Getting error failed. " + error.message);
-      }
-    
-      // const userRoles = await userResponse.json(); // Parse the response once here
+      return { isSuccess: true, result: userResponse };
+    } catch (error) {
+      throw new Error("Getting error failed. " + error.message);
     }
+  },
 
+  async setupRoleClaim(role, uid) {
+    console.log(role);
+    console.log(uid);
+    try {
+      await fetch(`${appConfig.baseURL}/auth/setup-role-claim`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role: role, uid: uid }),
+      });
+
+      return { isSuccess: true };
+    } catch (error) {
+      throw new Error("Getting error failed. " + error.message);
+    }
+  },
 };
 
 export default Auth;

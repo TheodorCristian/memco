@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import "./Signin.scss";
 import { useAuth } from "../../../Contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Utils from "../../../Utils/utils";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const { login, loading } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,12 +25,32 @@ const Signin = () => {
       let token = user.token;
       let uid = user.data.tokenResult.uid;
       let userRoles = user.userData;
+      let encryptedUserRoles = [];
+
+      for (const role of userRoles) {
+        let encryptedRole = Utils.encryptValue(role);
+        encryptedUserRoles.push(encryptedRole);
+      }
 
       localStorage.setItem("uid", uid);
       localStorage.setItem("userToken", token);
-      localStorage.setItem("userRoles", JSON.stringify(userRoles));
+      localStorage.setItem("userRoles", JSON.stringify(encryptedUserRoles));
+
+      window.dispatchEvent(new Event("localStorageUpdated"));
+
+      if (userRoles.includes("admin")) {
+        navigate("/admin-dashboard");
+      }
+
+      if (userRoles.includes("operator")) {
+        navigate("/operator-dashboard");
+      }
+
+      if (userRoles.includes("user")) {
+        navigate("/homepage");
+      }
     } catch (error) {
-      console.error("Login error:", error.message);
+      setError("Wrong Email or Password! Please Signin with correct data!");
     }
   };
 
