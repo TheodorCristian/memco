@@ -1,0 +1,8 @@
+.homepage__introduction {
+  position: relative;
+}
+
+.homepage__introduction .homepage__overlay {
+  background: rgba(255, 255, 255, 0.6);
+}
+/*# sourceMappingURL=Homepage.css.map */
