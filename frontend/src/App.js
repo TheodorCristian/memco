@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthProvider } from "./Contexts/AuthContext";
+import { CartProvider } from "./Contexts/CartContext";
 import Utils from "./Utils/utils";
 
 import ProtectedAdminRoute from "./Components/ProtectedAdminRoute";
@@ -42,175 +43,184 @@ function App() {
   return (
     <div className="App">
       <AuthProvider>
-        <Router>
-          <Routes>
-            <Route
-              path="/*"
-              element={
-                <GeneralLayout>
-                  {/* Nested Routes for Admin */}
-                  <Routes>
-                    {/* GENERAL ROUTES START*/}
-                    <Route
-                      exact
-                      path="/"
-                      element={<Navigate replace to="/homepage" />}
-                    />
-                    <Route exact path="/product/:productSlug" element={<ProductPage />} />
-                    <Route exact path="/signin" element={<Signin />} />
-                    <Route exact path="/signup" element={<Signup />} />
-                    <Route exact path="/homepage" element={<Homepage />} />
-                    <Route
-                      exact
-                      path="/:beneficiary/:couplename/:date/:id/qr-landing-page"
-                      element={<QRLandingPage />}
-                    />
-                    <Route
-                      exact
-                      path="/:couplename/:date/:id"
-                      element={<UserVideoPage />}
-                    />
-                    <Route
-                      exact
-                      path="/forbidden"
-                      element={<ForbiddenPage />}
-                    />
-                    <Route
-                      exact
-                      path="/session-expired"
-                      element={<SessionExpired />}
-                    />
-                    {/* GENERAL ROUTES END*/}
+        <CartProvider>
+          <Router>
+            <Routes>
+              <Route
+                path="/*"
+                element={
+                  <GeneralLayout>
+                    {/* Nested Routes for Admin */}
+                    <Routes>
+                      {/* GENERAL ROUTES START*/}
+                      <Route
+                        exact
+                        path="/"
+                        element={<Navigate replace to="/homepage" />}
+                      />
+                      <Route
+                        exact
+                        path="/product/:productSlug"
+                        element={<ProductPage />}
+                      />
+                      <Route exact path="/signin" element={<Signin />} />
+                      <Route exact path="/signup" element={<Signup />} />
+                      <Route exact path="/homepage" element={<Homepage />} />
+                      <Route
+                        exact
+                        path="/:beneficiary/:couplename/:date/:id/qr-landing-page"
+                        element={<QRLandingPage />}
+                      />
+                      <Route
+                        exact
+                        path="/:couplename/:date/:id"
+                        element={<UserVideoPage />}
+                      />
+                      <Route
+                        exact
+                        path="/forbidden"
+                        element={<ForbiddenPage />}
+                      />
+                      <Route
+                        exact
+                        path="/session-expired"
+                        element={<SessionExpired />}
+                      />
+                      {/* GENERAL ROUTES END*/}
 
-                    {/* ------------------ */}
+                      {/* ------------------ */}
 
-                    {/* USER ROUTES START*/}
+                      {/* USER ROUTES START*/}
 
-                    <Route
-                      path="/user/*"
-                      element={
-                        <>
-                          {/* Nested Routes for Admin */}
-                          <Routes>
-                            <Route exact path="/add-order" element={
-                              <ProtectedUserRoute redirectPath="/signin">
-                                <AddOrder />
-                              </ProtectedUserRoute>
-                              }
-                          />
-                          </Routes>
+                      <Route
+                        path="/user/*"
+                        element={
+                          <>
+                            {/* Nested Routes for Admin */}
+                            <Routes>
+                              <Route
+                                exact
+                                path="/add-order"
+                                element={
+                                  <ProtectedUserRoute redirectPath="/signin">
+                                    <AddOrder />
+                                  </ProtectedUserRoute>
+                                }
+                              />
+                            </Routes>
                           </>
-                      }
-                    />
+                        }
+                      />
 
-                    {/* USER ROUTES END*/}
+                      {/* USER ROUTES END*/}
 
-                    {/* ------------------ */}
+                      {/* ------------------ */}
 
-                    {/* OPERATOR ROUTES START*/}
-                    <Route
-                      exact
-                      path="/operator-dashboard"
-                      element={
-                        <ProtectedOperatorRoute redirectPath="/signin">
-                          <OperatorDashboard />
-                        </ProtectedOperatorRoute>
-                      }
-                    />
+                      {/* OPERATOR ROUTES START*/}
+                      <Route
+                        exact
+                        path="/operator-dashboard"
+                        element={
+                          <ProtectedOperatorRoute redirectPath="/signin">
+                            <OperatorDashboard />
+                          </ProtectedOperatorRoute>
+                        }
+                      />
 
-                    <Route
-                      exact
-                      path="/:beneficiary/:couplename/:date/:id/operator"
-                      element={
-                        <ProtectedOperatorRoute redirectPath="/signin">
-                          <OperatorVideoPage />
-                        </ProtectedOperatorRoute>
-                      }
-                    />
-                    {/* OPERATOR ROUTES END*/}
+                      <Route
+                        exact
+                        path="/:beneficiary/:couplename/:date/:id/operator"
+                        element={
+                          <ProtectedOperatorRoute redirectPath="/signin">
+                            <OperatorVideoPage />
+                          </ProtectedOperatorRoute>
+                        }
+                      />
+                      {/* OPERATOR ROUTES END*/}
 
-                    {/* ------------------ */}
+                      {/* ------------------ */}
 
-                    {/* ADMIN ROUTES START*/}
+                      {/* ADMIN ROUTES START*/}
 
-                    <Route
-                      path="/admin/*"
-                      element={
-                        <AdminLayout>
-                          {/* Nested Routes for Admin */}
-                          <Routes>
-                            <Route
-                              path="/dashboard"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <Dashboard />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            <Route
-                              path="/video-templates"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <VideoTemplates />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            <Route
-                              path="/orders"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <Orders />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            <Route
-                              path="/other"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <Other />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            <Route
-                              path="/qr-codes-generation"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <QRCodesGeneration />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            <Route
-                              path="/finance"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <Finance />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            <Route
-                              path="/settings"
-                              element={
-                                <ProtectedAdminRoute redirectPath="/signin">
-                                  <Settings />
-                                </ProtectedAdminRoute>
-                              }
-                            />
-                            {/* Add more nested routes for admin section */}
-                          </Routes>
-                        </AdminLayout>
-                      }
-                    />
+                      <Route
+                        path="/admin/*"
+                        element={
+                          <AdminLayout>
+                            {/* Nested Routes for Admin */}
+                            <Routes>
+                              <Route
+                                path="/dashboard"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <Dashboard />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              <Route
+                                path="/video-templates"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <VideoTemplates />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              <Route
+                                path="/orders"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <Orders />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              <Route
+                                path="/other"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <Other />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              <Route
+                                path="/qr-codes-generation"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <QRCodesGeneration />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              <Route
+                                path="/finance"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <Finance />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              <Route
+                                path="/settings"
+                                element={
+                                  <ProtectedAdminRoute redirectPath="/signin">
+                                    <Settings />
+                                  </ProtectedAdminRoute>
+                                }
+                              />
+                              {/* Add more nested routes for admin section */}
+                            </Routes>
+                          </AdminLayout>
+                        }
+                      />
 
-                    {/* ADMIN ROUTES END*/}
+                      {/* ADMIN ROUTES END*/}
 
-                    {/* 404 Page Not Found*/}
-                    <Route path="*" element={<PageNotFound />} />
-                  </Routes>
-                </GeneralLayout>
-              }
-            />
-          </Routes>
-        </Router>
+                      {/* 404 Page Not Found*/}
+                      <Route path="*" element={<PageNotFound />} />
+                    </Routes>
+                  </GeneralLayout>
+                }
+              />
+            </Routes>
+          </Router>
+        </CartProvider>
       </AuthProvider>
     </div>
   );

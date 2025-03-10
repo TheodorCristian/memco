@@ -124,8 +124,23 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const verifyToken = async () => {
+    setLoading(true);
+    try {
+      return await verifyTokenAPI();
+    } catch(error) {
+      // will return error message to create a react toaster
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+
+
+
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, userRoles, loading, login, logout, signup}}>
+    <AuthContext.Provider value={{ user, token, userRoles, loading, login, logout, signup, verifyToken}}>
       {children}
     </AuthContext.Provider>
   );

@@ -22,29 +22,9 @@ const Signin = () => {
 
     try {
       // Call the login function from the context
-      let user = await login(email, password);
-      // let token = user.token;
-      // let uid = user.data.tokenResult.uid;
-      // let userRoles = user.userData;
-      // let encryptedUserRoles = [];
-
-      // for (const role of userRoles) {
-      //   let encryptedRole = Utils.encryptValue(role);
-      //   encryptedUserRoles.push(encryptedRole);
-      // }
-
-      // sessionStorage.setItem("uid", uid);
-      // sessionStorage.setItem("userToken", token);
-      // sessionStorage.setItem("userRoles", JSON.stringify(encryptedUserRoles));
-
-      // window.dispatchEvent(new Event("sessionStorageUpdated"));
-
+      await login(email, password);
       let userRoles = sessionStorage.getItem('userRoles') ? JSON.parse(sessionStorage.getItem('userRoles')) : [];
       let decryptedRoles = userRoles.map(role => Utils.decryptValue(role));
-      console.log({
-        userRoles: userRoles,
-        decryptedRoles: decryptedRoles
-      })
 
       if (decryptedRoles.includes("admin")) {
         navigate("/admin/dashboard");
@@ -52,11 +32,11 @@ const Signin = () => {
 
       if (decryptedRoles.includes("operator")) {
         navigate("/operator-dashboard");
-        console.log('in refirect')
       }
 
       if (decryptedRoles.includes("user")) {
-        navigate("/homepage");
+        let historicPage = sessionStorage.getItem('historicPage');
+        historicPage ? navigate(historicPage) : navigate('/homepage');
       }
     } catch (error) {
       setError("Wrong Email or Password! Please Signin with correct data!");

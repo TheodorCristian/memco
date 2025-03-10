@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext,useContext, useEffect, useState } from 'react'
 
 const CartContext = createContext();
 
@@ -18,12 +18,18 @@ export const CartProvider = ({children}) => {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
+
+
+    // aici sa adaug logica pentru pendingProduct 
   }, []);
 
-  const addToCart = (newItem) => {
+  const addToCart = (newItem, user) => {
     setLoading(true);
+    const completeProduct = {...newItem, uid: user.uid}
+    
     try {
-      setCart(...existingCartItems, newItem);
+      setCart([...cart, completeProduct]);
+      sessionStorage.setItem('cart', cart);
     } catch (error) {
       // will add here a logic to use a react toaster to show the error message
       console.log(error.message);

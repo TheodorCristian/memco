@@ -1,4 +1,4 @@
-import appConfig from "../AppConfigurations/appConfig";
+import appConfig from "../AppConfigurations/appConfig"; 
 
 export const makeAuthenticatedRequest = async (path, method, body) => {
   try {
