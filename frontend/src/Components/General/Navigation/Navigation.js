@@ -8,9 +8,8 @@ import LoginIcon from "../../../Assets/Icons/login.png";
 const Navigation = () => {
   const [isOpened, setIsOpened] = useState(false);
   const [error, setError] = useState("");
-  const { logout } = useAuth();
-  const user = sessionStorage.getItem("user");
-  const userRoles = sessionStorage.getItem("userRoles");
+  const { logout, user, userRoles } = useAuth();
+
   const navigate = useNavigate();
 
   const style = {

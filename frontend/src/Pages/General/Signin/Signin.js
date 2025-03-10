@@ -9,7 +9,11 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { login, loading } = useAuth();
+  const { login, loading, user, userRoles } = useAuth();
+  console.log({
+    user: user,
+    userRoles: userRoles
+  })
 
   const navigate = useNavigate();
 
@@ -23,7 +27,6 @@ const Signin = () => {
     try {
       // Call the login function from the context
       await login(email, password);
-      let userRoles = sessionStorage.getItem('userRoles') ? JSON.parse(sessionStorage.getItem('userRoles')) : [];
       let decryptedRoles = userRoles.map(role => Utils.decryptValue(role));
 
       if (decryptedRoles.includes("admin")) {

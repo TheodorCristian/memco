@@ -1,12 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import Utils from "../Utils/utils";
+import { useAuth } from "../Contexts/AuthContext";
 
 const ProtectedOperatorRoute = ({ redirectPath, children }) => {
-  // const userRoles = JSON.parse(sessionStorage.getItem("userRoles"));
-  const user = sessionStorage.getItem("user");
+  const {userRoles, user} = useAuth();
 
-  let userRoles = sessionStorage.getItem('userRoles') ? JSON.parse(sessionStorage.getItem('userRoles')) : [];
   let decryptedRoles = userRoles.map(role => Utils.decryptValue(role));
   if (!userRoles || !user) {
     return <Navigate to={redirectPath} />;

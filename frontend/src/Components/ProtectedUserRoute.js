@@ -1,12 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import Utils from "../Utils/utils";
+import { useAuth } from "../Contexts/AuthContext";
 
 const ProtectedUserRoute = ({ redirectPath, children }) => {
-  const userRoles = JSON.parse(sessionStorage.getItem("userRoles"));
-  const uid = sessionStorage.getItem("uid");
+  const {user, userRoles} = useAuth();
 
-  if (!userRoles || !uid) {
+
+  if (!userRoles || !user) {
     return <Navigate to={redirectPath} />;
   }
 

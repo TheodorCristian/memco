@@ -1,8 +1,10 @@
 import appConfig from "../AppConfigurations/appConfig"; 
+import { useAuth } from "../Contexts/AuthContext";
 
-export const makeAuthenticatedRequest = async (path, method, body) => {
+export const MakeAuthenticatedRequest = async (path, method, body) => {
+  const {token} = useAuth();
   try {
-    const token = sessionStorage.getItem("userToken");
+    // const token = await 
     if (!token) {
       throw new Error("Token not found in sessionStorage");
     }

@@ -21,18 +21,14 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-      const storedUser = sessionStorage.getItem("user") || await getFromDB("user");
-      const storedToken = sessionStorage.getItem("userToken") || await getFromDB("userToken");
-      const storedRoles = sessionStorage.getItem("userRoles") || await getFromDB("userRoles");
-
+      const storedUser = await getFromDB("user");
+      const storedToken = await getFromDB("userToken");
+      const storedRoles = await getFromDB("userRoles");
+      
       if (storedUser && storedToken && storedRoles) {
         setUser(JSON.parse(storedUser));
         setToken(JSON.parse(storedToken));
         setUserRoles(JSON.parse(storedRoles));
-
-        sessionStorage.setItem("user", storedUser);
-        sessionStorage.setItem("userToken", storedToken);
-        sessionStorage.setItem("userRoles", storedRoles);
       }
 
       const isValid = await verifyTokenAPI();
@@ -67,9 +63,9 @@ export const AuthProvider = ({ children }) => {
       let encryptedUserRoles = userRoles.map(role => Utils.encryptValue(role))
       setUserRoles(encryptedUserRoles);
 
-      sessionStorage.setItem("user", JSON.stringify(userToken.data));
-      sessionStorage.setItem("userToken", JSON.stringify(userToken.token));
-      sessionStorage.setItem("userRoles", JSON.stringify(encryptedUserRoles));
+      // sessionStorage.setItem("user", JSON.stringify(userToken.data));
+      // sessionStorage.setItem("userToken", JSON.stringify(userToken.token));
+      // sessionStorage.setItem("userRoles", JSON.stringify(encryptedUserRoles));
 
       await saveToDB("user", JSON.stringify(userToken.data));
       await saveToDB("userToken", JSON.stringify(userToken.token));

@@ -165,7 +165,7 @@ const Homepage = () => {
         </p>
       </div>
       <div className="flex justify-between items-center flex-wrap xl:w-[80%] w-full mx-auto mb-8">
-        {products.map((item) => {
+        {products && products.map((item) => {
           return <ProductTeaser productData={item} key={item.id} />;
         })}
       </div>
