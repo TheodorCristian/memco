@@ -13,7 +13,7 @@ dist
 dist-ssr
 *.local
 
-serviceAccountKey.json
+./serviceAccountKey.json
 
 # Editor directories and files
 .vscode/*
